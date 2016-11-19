@@ -52,7 +52,7 @@ try:
   builds = int(untangle.parse(builds_xml).builds["count"])
 
   for id in project_ids:
-    project_url = current_url + "id)"
+    project_url = current_url + id + ")"
     current_xml = requests.get(project_url, auth=HTTPBasicAuth(user,password)).text
     current = untangle.parse(current_xml).builds.build["status"]
     if current == "FAILURE" or current == "ERROR":
