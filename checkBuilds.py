@@ -32,6 +32,10 @@ failed = 0
 building = 0
 project_ids = []
 
+lastcmd = ""
+with open('lastblink.conf', 'r+') as lastblink:
+  lastcmd = lastblink.readline().rstrip("\n")
+
 try:
   build_config_xml = requests.get(build_config_url, auth=HTTPBasicAuth(user,password)).text
   build_configs = untangle.parse(build_config_xml).buildTypes.buildType
@@ -47,7 +51,6 @@ try:
   for id in project_ids:
     project_url = current_url + "id)"
     current_xml = requests.get(project_url, auth=HTTPBasicAuth(user,password)).text
-    print current_xml
     current = untangle.parse(current_xml).builds.build["status"]
     if current == "FAILURE" or current == "ERROR":
       failed = failed + 1
@@ -64,7 +67,13 @@ try:
   if building > 0 and failed > 0:
     color = "yellow"
 
-  os.system(blink + "--" + color)
+  cmd = blink + "-q --" + color
+  if cmd != lastcmd:
+    os.system(cmd + " --blink 10")
+    with open('lastblink.conf', 'w') as lastblink:
+      lastblink.write(cmd)
+
+  os.system(cmd)
 except:
-  os.system(blink + "--off")
+  os.system(blink + "--off -q")
   exit()
