@@ -10,6 +10,9 @@ import os
 # blink1-tool path
 blink = "/home/pi/blink1/commandline/blink1-tool "
 
+# path to store last build status at
+hist_path = "/home/pi"
+
 # TeamCity base URL
 tc_base = "http://TC_URL:8111"
 
@@ -33,7 +36,7 @@ building = 0
 project_ids = []
 
 lastcmd = ""
-with open('lastblink.conf', 'r+') as lastblink:
+with open(hist_path + '/lastblink.conf', 'r+') as lastblink:
   lastcmd = lastblink.readline().rstrip("\n")
 
 try:
@@ -70,7 +73,7 @@ try:
   cmd = blink + "-q --" + color
   if cmd != lastcmd:
     os.system(cmd + " --blink 10")
-    with open('lastblink.conf', 'w') as lastblink:
+    with open(hist_path + '/lastblink.conf', 'w') as lastblink:
       lastblink.write(cmd)
 
   os.system(cmd)
