@@ -68,6 +68,9 @@ try:
     color = "blue"
 
   if building > 0 and failed > 0:
+    color = "cyan"
+
+  if builds > 0 and failed > 0:
     color = "yellow"
 
   cmd = blink + "-q --" + color
